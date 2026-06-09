@@ -1,0 +1,8 @@
+{
+  "name": "Remix: PROTOCOLOS - HMM ",
+  "description": "Sistema integrado de gestão hospitalar do Hospital Municipal de Morrinhos, incluindo Protocolos Assistenciais e Gestão de Leitos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

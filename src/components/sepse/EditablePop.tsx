@@ -1,0 +1,626 @@
+import React from 'react';
+import { ChevronRight, Filter, Download, ListChecks, ArrowRight, Printer, Check, Info } from 'lucide-react';
+import { ConfigDict, CheckItem } from './sepseTypes';
+import { AutoResizeTextarea } from './AutoResizeTextarea';
+
+export const EditablePop = ({ localConfig, handleFieldChange, localChecklists, setLocalChecklists, localLogos }: any) => {
+  const [news, setNews] = React.useState<any>({});
+  const [sofa, setSofa] = React.useState<any>({});
+
+  const newsScore = 4;
+  const sofaScore = 2;
+
+  // Helper macro for inputs
+  const T = (key: string, _default: string, additionalClasses?: string) => (
+    <AutoResizeTextarea
+      value={localConfig[key] || _default} 
+      onChange={(e) => handleFieldChange(key, e.target.value)}
+      className={`bg-transparent outline-none w-full border-b border-dashed border-transparent hover:border-slate-350 focus:border-slate-500 focus:bg-white transition-all resize-none block overflow-hidden ${additionalClasses || ''}`}
+      rows={1}
+    />
+  );
+  
+  return (
+    <div className="max-w-[1280px] mx-auto bg-slate-50 pt-2 pb-10 space-y-5 px-6 text-[10px] font-sans text-slate-800">
+       <div className="text-center space-y-2 mb-4 bg-sky-50 p-4 border border-sky-200 shadow-sm rounded-xl">
+         <h2 className="text-sm font-black text-sky-700 text-center uppercase tracking-widest">Edição do Procedimento POP</h2>
+         <p className="text-xs text-sky-600 font-bold">Modo Espelho: Altere os textos clicando nos títulos abaixo.</p>
+       </div>
+       <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-4 text-center text-xs font-bold text-slate-500">
+         [Espaço Reservado para o Layout POP] - Você pode adicionar campos dinamicamente conforme necessário.
+       </div>
+       
+
+      <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-300">
+        
+        {/* POP HEADER */}
+        <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+          {/* Logo Slots Row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 items-center border-b border-slate-100 bg-slate-50/50">
+            {/* Slot 1: Brasão */}
+            <div className="flex items-center justify-center md:justify-start min-h-[60px]" id="pop-logo-slot-1">
+              {localLogos['1'] ? (
+                <img src={localLogos['1']!} alt="Logo 1" className="max-h-[50px] object-contain" />
+              ) : (
+                <div className="flex items-center gap-3 select-none">
+                  <div className="w-10 h-10 rounded-xl bg-[#185fa5] flex items-center justify-center text-white font-black text-xs shadow-sm">
+                    HMM
+                  </div>
+                  <div className="leading-none font-sans text-slate-700">
+                    <span className="text-[9px] block font-black tracking-widest text-[#185fa5]">MUNICIPIO DE</span>
+                    <span className="text-sm font-black tracking-tighter block text-slate-900">MORRINHOS</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Slot 2: Secretaria de Saúde */}
+            <div className="flex items-center justify-center min-h-[60px]" id="pop-logo-slot-2">
+              {localLogos['2'] ? (
+                <img src={localLogos['2']!} alt="Logo 2" className="max-h-[50px] object-contain" />
+              ) : (
+                <div className="flex items-center gap-3 select-none">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="w-1.5 h-6 bg-emerald-700 rounded-full" />
+                    <span className="w-1.5 h-6 bg-red-650 rounded-full" />
+                  </div>
+                  <div className="leading-none text-slate-700 font-sans">
+                    <span className="text-[10px] block font-light tracking-[0.18em]">SECRETARIA DE</span>
+                    <span className="text-base font-black tracking-tight block text-slate-900">SAÚDE</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Slot 3: SUS */}
+            <div className="flex items-center justify-center md:justify-end min-h-[60px]" id="pop-logo-slot-3">
+              {localLogos['3'] ? (
+                <img src={localLogos['3']!} alt="Logo SUS" className="max-h-[50px] object-contain" />
+              ) : (
+                <div className="flex items-center gap-2 select-none">
+                  <span className="text-3xl font-black text-blue-600 tracking-tighter border-b-4 border-blue-800 pb-0.5">SUS</span>
+                  <span className="text-[8px] font-bold text-blue-800 tracking-wider uppercase leading-snug">Sistema Único<br />de Saúde</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Banner Titles */}
+          <div className="bg-emerald-800 text-white text-center py-2.5 text-xs font-black tracking-widest uppercase">
+            {T('pop.titulo', 'PROCEDIMENTO OPERACIONAL PADRÃO - POP', 'text-center')}
+          </div>
+          <div className="bg-emerald-700 text-white text-center py-3.5 text-sm font-black tracking-wider border-t border-emerald-950 uppercase">
+            {T('pop.subtitulo', 'TÍTULO: PROTOCOLO DE SEPSE', 'text-center')}
+          </div>
+
+          {/* Code, Version, Page columns */}
+          <div className="grid grid-cols-3 divide-x divide-emerald-800 border-t border-emerald-800 bg-emerald-600 text-white text-center text-[10px] font-black uppercase">
+            <div className="py-2.5">{T('pop.codigo', 'Código: POP-HMM-001', 'text-center')}</div>
+            <div className="py-2.5">{T('pop.versao', 'VERSÃO: 01', 'text-center')}</div>
+            <div className="py-2.5">{T('pop.pagina', 'PÁGINA 1', 'text-center')}</div>
+          </div>
+
+          {/* Dates columns */}
+          <div className="grid grid-cols-3 divide-x divide-emerald-100 bg-white border-t border-emerald-800 text-[10px] text-center uppercase font-bold text-slate-500">
+            <div className="py-2.5">
+              <span className="text-[8px] block text-slate-400">Data de Elaboração</span>
+              <span className="text-slate-800 font-extrabold">{T('pop.data_elab', '25/05/2026', 'text-center')}</span>
+            </div>
+            <div className="py-2.5">
+              <span className="text-[8px] block text-slate-400">Data de Aprovação</span>
+              <span className="text-slate-800 font-extrabold">{T('pop.data_aprov', '26/05/2026', 'text-center')}</span>
+            </div>
+            <div className="py-2.5">
+              <span className="text-[8px] block text-slate-400">Próxima Revisão</span>
+              <span className="text-slate-800 font-extrabold">{T('pop.data_rev', '26/05/2027', 'text-center')}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Informative Header (Doutor & Instituição info) */}
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm select-none animate-in fade-in">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-black text-slate-900 tracking-tight">{T('header.titulo', 'Sepse', 'text-center')}</h1>
+              <span className="bg-blue-100 text-blue-800 text-[9px] font-black px-2.5 py-0.5 rounded-full tracking-wider">{T('header.badge', 'SSC 2026', 'text-center')}</span>
+            </div>
+            <p className="text-[11px] text-slate-500 font-bold mt-1 leading-relaxed">{T('header.sub', 'Baseado nas diretrizes Surviving Sepsis Campaign (SSC) 2026', 'text-center')}</p>
+          </div>
+          <div className="md:text-right">
+            <span className="inline-block text-[9px] font-black tracking-widest text-[#185fa5] bg-blue-50/50 border border-blue-200/50 rounded-full px-3 py-1 mb-1">
+              {T('header.hospital', 'Hospital Municipal de Morrinhos', 'text-center')}
+            </span>
+            <p className="text-xs font-black text-slate-700">{T('header.autor', 'Dr. Ivaldo Inácio Silva Júnior', 'text-center')}</p>
+            <p className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wide mt-0.5">{T('header.cargo', 'Diretor Técnico do Hospital Municipal de Morrinhos', 'text-center')}</p>
+          </div>
+        </div>
+
+        {/* Patient Card Resumo */}
+        <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="p-8 bg-white grid grid-cols-1 md:grid-cols-2 gap-8 relative border-b border-slate-100">
+             <div>
+               <h3 className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-4">Dados do Atendimento</h3>
+               <div className="space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-50 pb-2">
+                    <span className="text-xs font-bold text-slate-500">PACIENTE:</span>
+                    <span className="text-xs font-black text-slate-800">PACIENTE (MOCK)</span>
+                  </div>
+                  <div className="flex items-center justify-between border-b border-slate-50 pb-2">
+                    <span className="text-xs font-bold text-slate-500">LEITO / SETOR:</span>
+                    <span className="text-xs font-black text-slate-800">BOX 01 - SALA DE ESTABILIZAÇÃO</span>
+                  </div>
+                  <div className="flex items-center justify-between border-b border-slate-50 pb-2">
+                    <span className="text-xs font-bold text-slate-500">MÉDICO RESPONSÁVEL:</span>
+                    <span className="text-xs font-black text-slate-800">DR. PLANTÃO - CRM 00000</span>
+                  </div>
+               </div>
+             </div>
+             
+             <div className="flex flex-col gap-4">
+               <h3 className="text-[10px] uppercase font-black tracking-widest text-slate-400">Resumo de Triagem</h3>
+               <div className="flex gap-4">
+                 <div className={`flex items-center gap-4 p-4 rounded-2xl border flex-1 ${newsScore >= 4 ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-100'}`}>
+                   <div className={`w-14 h-14 rounded-full border-4 flex items-center justify-center flex-shrink-0 ${newsScore >= 4 ? 'border-amber-500 text-amber-600' : 'border-slate-300 text-slate-500'}`}>
+                     <span className="text-xl font-black">{newsScore}</span>
+                   </div>
+                   <div>
+                     <p className="text-xs font-black uppercase mb-1">Escore NEWS</p>
+                     <p className="text-[10px] font-bold opacity-80">{newsScore >= 4 ? 'Alto risco (≥ 4) - Rastrear Sepse' : 'Baixo risco clínico'}</p>
+                   </div>
+                 </div>
+                 
+                 <div className={`flex items-center gap-4 p-4 rounded-2xl border flex-1 ${sofaScore >= 2 ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-100'}`}>
+                   <div className={`w-14 h-14 rounded-full border-4 flex items-center justify-center flex-shrink-0 ${sofaScore >= 2 ? 'border-red-500 text-red-600' : 'border-slate-300 text-slate-500'}`}>
+                     <span className="text-xl font-black">{sofaScore}</span>
+                   </div>
+                   <div>
+                     <p className="text-xs font-black uppercase mb-1">Escore SOFA</p>
+                     <p className="text-[10px] font-bold opacity-80">{sofaScore >= 2 ? 'Disfunção Grave (≥ 2) - Ativar UTI' : 'Sem disfunção'}</p>
+                   </div>
+                 </div>
+               </div>
+
+               {newsScore >= 4 && sofaScore >= 2 && (
+                 <div className="bg-red-600 text-white p-3 rounded-xl flex items-center justify-center gap-2 font-black text-xs uppercase tracking-widest animate-pulse shadow-lg shadow-red-200">
+                   
+                   SEPSE — ATIVAR PROTOCOLO IMEDIATAMENTE
+                 </div>
+               )}
+             </div>
+          </div>
+        </div>
+
+        {/* 1. CLASSIFICAÇÃO DA SEPSE */}
+        <div className="space-y-4">
+           <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+             <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">1</span>
+             NOVA CLASSIFICAÇÃO DA SEPSE (SSC 2026)
+           </h3>
+           
+           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              <div className="bg-white border-2 border-slate-100 rounded-2xl p-6 shadow-sm hover:border-slate-300 transition-colors cursor-pointer group">
+                 <h4 className="font-black text-slate-700 mb-3 text-center uppercase tracking-widest text-xs">Sepse Improvável</h4>
+                 <p className="text-[11px] text-slate-500 text-center mb-6 leading-relaxed">Baixa probabilidade. A disfunção é melhor explicada por causa não infecciosa.</p>
+                 <div className="space-y-3 pt-4 border-t border-slate-100">
+                    <p className="text-[10px] font-bold text-slate-400"># APLICAÇÃO CLÍNICA:</p>
+                    <p className="text-[11px] font-bold text-slate-700 flex justify-between">Suspeita de Infecção? <span>→ Não</span></p>
+                    <p className="text-[11px] font-bold text-slate-700 flex justify-between">Disfunção orgânica? <span>→ Sim</span></p>
+                 </div>
+                 <div className="mt-4 p-3 bg-slate-50 rounded-xl space-y-1">
+                    <p className="text-[10px] font-black text-slate-500"># CONDUTAS:</p>
+                    <p className="text-[10px] text-slate-600">• Não iniciar ATB empiricamente.</p>
+                    <p className="text-[10px] text-slate-600">• Investigar causas alternativas.</p>
+                 </div>
+              </div>
+
+              <div className="bg-amber-50/30 border-2 border-amber-100 rounded-2xl p-6 shadow-sm hover:border-amber-300 transition-colors cursor-pointer group">
+                 <h4 className="font-black text-amber-700 mb-3 text-center uppercase tracking-widest text-xs">Sepse Possível</h4>
+                 <p className="text-[11px] text-slate-600 text-center mb-6 leading-relaxed">Há disfunção orgânica e suspeita de infecção, porém diagnóstico ainda não claro.</p>
+                 <div className="space-y-3 pt-4 border-t border-amber-100/50">
+                    <p className="text-[10px] font-bold text-amber-600/70"># APLICAÇÃO CLÍNICA:</p>
+                    <p className="text-[11px] font-bold text-slate-800 flex justify-between">Suspeita de Infecção? <span>→ Possível</span></p>
+                    <p className="text-[11px] font-bold text-slate-800 flex justify-between">Confirmação diagnóstica? <span>→ Não</span></p>
+                 </div>
+                 <div className="mt-4 p-3 bg-amber-100/40 rounded-xl space-y-1">
+                    <p className="text-[10px] font-black text-amber-800"># CONDUTAS:</p>
+                    <p className="text-[10px] text-amber-900">• Investigação rápida + ATB em até 3 horas se infecção persistir (Recomendação CONDICIONAL).</p>
+                 </div>
+              </div>
+
+              <div className="bg-rose-50/40 border-2 border-rose-200 rounded-2xl p-6 shadow-sm hover:border-rose-400 transition-colors cursor-pointer group hover:-translate-y-1">
+                 <h4 className="font-black text-rose-700 mb-3 text-center uppercase tracking-widest text-xs">Sepse Provável</h4>
+                 <p className="text-[11px] text-slate-600 text-center mb-6 leading-relaxed">Infecção com alta probabilidade associada a disfunção orgânica (SOFA ≥ 2).</p>
+                 <div className="space-y-3 pt-4 border-t border-rose-100">
+                    <p className="text-[10px] font-bold text-rose-500"># APLICAÇÃO CLÍNICA:</p>
+                    <p className="text-[11px] font-bold text-slate-800 flex justify-between">Alta suspeita infecção? <span>→ Sim</span></p>
+                    <p className="text-[11px] font-bold text-slate-800 flex justify-between">Disfunção orgânica? <span>→ Sim</span></p>
+                 </div>
+                 <div className="mt-4 p-3 bg-rose-100 rounded-xl space-y-1">
+                    <p className="text-[10px] font-black text-rose-900"># CONDUTAS:</p>
+                    <p className="text-[10px] text-rose-950 font-bold">• ATB imediatamente (Meta &lt; 1 hora).</p>
+                    <p className="text-[10px] text-rose-900">• Conduzir vigorosamente como sepse.</p>
+                 </div>
+              </div>
+
+              <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-6 shadow-sm hover:border-red-500 transition-colors cursor-pointer group hover:-translate-y-1 shadow-red-100">
+                 <h4 className="font-black text-red-700 mb-3 text-center uppercase tracking-widest text-xs">Sepse Definida</h4>
+                 <p className="text-[11px] text-slate-600 text-center mb-6 leading-relaxed">Infecção confirmada associada à disfunção orgânica irreversível ou detectada.</p>
+                 <div className="space-y-3 pt-4 border-t border-red-200">
+                    <p className="text-[10px] font-bold text-red-500"># APLICAÇÃO CLÍNICA:</p>
+                    <p className="text-[11px] font-bold text-slate-800 flex justify-between">Confirmação infecção? <span>→ Sim</span></p>
+                    <p className="text-[11px] font-bold text-slate-800 flex justify-between">Outro diagnóstico? <span>→ Não</span></p>
+                 </div>
+                 <div className="mt-4 p-3 bg-red-600 text-white rounded-xl space-y-1">
+                    <p className="text-[10px] font-black text-red-200"># CONDUTAS:</p>
+                    <p className="text-[10px] text-white font-bold">• Iniciar protocolo SEPSE Imediato.</p>
+                    <p className="text-[10px] text-white font-bold">• ATB (Meta &lt; 1 hora).</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        {/* 2 & 3. TRIAGEM NEWS & SOFA QUICK LINKS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           {/* Section 2 */}
+           <div className="space-y-4">
+             <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+               <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">2</span>
+               TRIAGEM COM ESCORE NEWS
+             </h3>
+             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+               <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                 <div>
+                    <p className="text-xs font-black text-slate-500 uppercase">Pontuação NEWS</p>
+                    <p className="text-3xl font-black text-amber-500">{newsScore} <span className="text-sm font-bold text-slate-400">pontos</span></p>
+                 </div>
+                 <div className={`px-4 py-2 rounded-xl text-center font-bold text-xs uppercase shadow-sm ${newsScore >= 4 ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'}`}>
+                   {newsScore >= 4 ? 'Alto Risco (≥ 4)' : 'Baixo Risco'}
+                 </div>
+               </div>
+               
+               <div className="space-y-4">
+                 {[
+                   {
+                     label: 'Frequência Respiratória (rpm)',
+                     id: 'respRate',
+                     options: [
+                       { label: '≤ 8 (+3)', val: 3 },
+                       { label: '9-11 (+1)', val: 1 },
+                       { label: '12-20 (0)', val: 0 },
+                       { label: '21-24 (+2)', val: 2 },
+                       { label: '≥ 25 (+3)', val: 3 },
+                     ]
+                   },
+                   {
+                     label: 'Oxigênio Suplementar',
+                     id: 'supplementalOxygen',
+                     options: [
+                       { label: 'Ar Ambiente (0)', val: 0 },
+                       { label: 'Suplementar (+2)', val: 2 },
+                     ]
+                   },
+                   {
+                     label: 'Saturação de Oxigênio (%)',
+                     id: 'oxygen',
+                     options: [
+                       { label: '≤ 91% (+3)', val: 3 },
+                       { label: '92-93% (+2)', val: 2 },
+                       { label: '94-95% (+1)', val: 1 },
+                       { label: '≥ 96% (0)', val: 0 },
+                     ]
+                   },
+                   {
+                     label: 'Temperatura Corporal (°C)',
+                     id: 'temp',
+                     options: [
+                       { label: '≤ 35.0 (+3)', val: 3 },
+                       { label: '35.1-36.0 (+1)', val: 1 },
+                       { label: '36.1-38.0 (0)', val: 0 },
+                       { label: '38.1-39.0 (+1)', val: 1 },
+                       { label: '≥ 39.1 (+2)', val: 2 },
+                     ]
+                   },
+                   {
+                     label: 'Pressão Arterial Sistêmica (mmHg)',
+                     id: 'bp',
+                     options: [
+                       { label: '≤ 90 (+3)', val: 3 },
+                       { label: '91-100 (+2)', val: 2 },
+                       { label: '101-110 (+1)', val: 1 },
+                       { label: '111-219 (0)', val: 0 },
+                       { label: '≥ 220 (+3)', val: 3 },
+                     ]
+                   },
+                   {
+                     label: 'Frequência Cardíaca (bpm)',
+                     id: 'heartRate',
+                     options: [
+                       { label: '≤ 40 (+3)', val: 3 },
+                       { label: '41-50 (+1)', val: 1 },
+                       { label: '51-90 (0)', val: 0 },
+                       { label: '91-110 (+1)', val: 1 },
+                       { label: '111-130 (+2)', val: 2 },
+                       { label: '≥ 131 (+3)', val: 3 },
+                     ]
+                   },
+                   {
+                     label: 'Nível de Consciência (AVPU)',
+                     id: 'mentalStatus',
+                     options: [
+                       { label: 'Alerta (A) (0)', val: 0 },
+                       { label: 'V, P ou U (+3)', val: 3 },
+                     ]
+                   }
+                 ].map(group => (
+                   <div key={group.id} className="border-b border-slate-50 last:border-0 pb-3 last:pb-0">
+                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1 block">{group.label}</label>
+                     <div className="flex flex-wrap gap-1.5">
+                       {group.options.map((opt, oIdx) => (
+                         <button
+                           key={oIdx}
+                           onClick={() => setNews(prev => ({ ...prev, [group.id]: opt.val }))}
+                           className={`px-3 py-1.5 text-[10px] font-black rounded-lg border transition-all ${news[group.id as keyof typeof news] === opt.val ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-amber-300'}`}
+                         >
+                           {opt.label}
+                         </button>
+                       ))}
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+           </div>
+
+           {/* Section 3 */}
+           <div className="space-y-4">
+             <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+               <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">3</span>
+               ESCOR SOFA
+             </h3>
+             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+               <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                 <div>
+                    <p className="text-xs font-black text-slate-500 uppercase">Pontuação SOFA</p>
+                    <p className="text-3xl font-black text-emerald-600">{sofaScore} <span className="text-sm font-bold text-slate-400">pontos</span></p>
+                 </div>
+                 <div className={`px-4 py-2 rounded-xl text-center font-bold text-xs uppercase shadow-sm ${sofaScore >= 2 ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'}`}>
+                   {sofaScore >= 2 ? 'Disfunção Progressiva (≥ 2)' : 'Sem Disfunção'}
+                 </div>
+               </div>
+
+               <div className="space-y-4">
+                 {[
+                   {
+                     label: 'Respiração (PaO2/FiO2 mmHg)',
+                     id: 'resp',
+                     options: [
+                       { label: '≥ 400 (0)', val: 0 },
+                       { label: '< 400 (1)', val: 1 },
+                       { label: '< 300 (2)', val: 2 },
+                       { label: '< 200 c/ Suporte (3)', val: 3 },
+                       { label: '< 100 c/ Suporte (4)', val: 4 },
+                     ]
+                   },
+                   {
+                     label: 'Coagulação (Plaquetas x10³/mm³)',
+                     id: 'coag',
+                     options: [
+                       { label: '≥ 150 (0)', val: 0 },
+                       { label: '< 150 (1)', val: 1 },
+                       { label: '< 100 (2)', val: 2 },
+                       { label: '< 50 (3)', val: 3 },
+                       { label: '< 20 (4)', val: 4 },
+                     ]
+                   },
+                   {
+                     label: 'Fígado (Bilirrubina Total mg/dL)',
+                     id: 'liver',
+                     options: [
+                       { label: '< 1.2 (0)', val: 0 },
+                       { label: '1.2-1.9 (1)', val: 1 },
+                       { label: '2.0-5.9 (2)', val: 2 },
+                       { label: '6.0-11.9 (3)', val: 3 },
+                       { label: '> 12.0 (4)', val: 4 },
+                     ]
+                   },
+                   {
+                     label: 'Cardiovascular (PAM / Drogas Vasoativas)',
+                     id: 'cardio',
+                     options: [
+                       { label: 'PAM ≥ 70 (0)', val: 0 },
+                       { label: 'PAM < 70 (1)', val: 1 },
+                       { label: 'Dopamina ≤ 5 ou Dobutamina (2)', val: 2 },
+                       { label: 'Dopamina 5.1-15 ou Nora ≤ 0.1 (3)', val: 3 },
+                       { label: 'Dopamina > 15 ou Nora > 0.1 (4)', val: 4 },
+                     ]
+                   },
+                   {
+                     label: 'Neurológico (Escala de Glasgow)',
+                     id: 'cns',
+                     options: [
+                       { label: '15 (0)', val: 0 },
+                       { label: '13-14 (1)', val: 1 },
+                       { label: '10-12 (2)', val: 2 },
+                       { label: '6-9 (3)', val: 3 },
+                       { label: '< 6 (4)', val: 4 },
+                     ]
+                   },
+                   {
+                     label: 'Renal (Creatinina mg/dL ou DU)',
+                     id: 'renal',
+                     options: [
+                       { label: '< 1.2 (0)', val: 0 },
+                       { label: '1.2-1.9 (1)', val: 1 },
+                       { label: '2.0-3.4 (2)', val: 2 },
+                       { label: '3.5-4.9 ou DU<500 (3)', val: 3 },
+                       { label: '> 5.0 ou DU<200 (4)', val: 4 },
+                     ]
+                   }
+                 ].map(group => (
+                   <div key={group.id} className="border-b border-slate-50 last:border-0 pb-3 last:pb-0">
+                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1 block">{group.label}</label>
+                     <div className="flex flex-wrap gap-1.5">
+                       {group.options.map((opt, oIdx) => (
+                         <button
+                           key={oIdx}
+                           onClick={() => setSofa(prev => ({ ...prev, [group.id]: opt.val }))}
+                           className={`px-3 py-1.5 text-[10px] font-black rounded-lg border transition-all ${sofa[group.id as keyof typeof sofa] === opt.val ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-emerald-400'}`}
+                         >
+                           {opt.label}
+                         </button>
+                       ))}
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+           </div>
+        </div>
+
+        {/* 4. PACOTE DA 1a HORA */}
+        <div className="space-y-4">
+           <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+             <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">4</span>
+             PACOTE DA 1ª HORA (SSC 2026) — Ações Imediatas
+           </h3>
+           <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+             <div className="space-y-4">
+               {[
+                 { label: 'Cabeceira elevada 30 a 45º' },
+                 { label: 'Monitorização de sinais vitais com suporte', sub: 'PA, FC, FR, SPO2 e Nível de consciência.' },
+                 { label: 'Garantir acesso venoso periférico calibroso', sub: 'Preferencialmente 2 acessos (18G ou 20G). Considerar central conforme necessidade.' },
+                 { label: 'Expansão volêmica com 30 mL/kg Ringer Lactato em até 3h', sub: 'Individualizar em idosos/cardiopatas (considerar menor volume).' },
+                 { label: 'Lactato sérico (Coleta imediata)' },
+                 { label: 'Hemoculturas (2 pares ou 4 amostras em locais diferentes)', sub: 'A coleta deve preceder a antibioticoterapia sempre que possível. Não retardar ATB por mais de 45 min.' },
+                 { label: 'Iniciar antibioticoterapia de amplo espectro precocemente', sub: 'Até 1 hora para sepse provável/definida ou choque.' },
+                 { label: 'Gasometria arterial, Hemograma, Bilirrubinas, Ureia, Creatinina, Coagulograma' },
+               ].map((item, idx) => (
+                 <div key={idx} className="flex gap-4 p-4 border rounded-xl hover:bg-slate-50 transition-colors items-start">
+                   <div className="w-6 h-6 border-2 border-slate-300 rounded shrink-0" />
+                   <div>
+                     <p className="text-sm font-bold text-slate-800">{item.label}</p>
+                     {item.sub && <p className="text-xs font-medium text-slate-500 mt-1 leading-relaxed">{item.sub}</p>}
+                   </div>
+                 </div>
+               ))}
+               <div className="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-xl text-sm font-bold flex gap-3 mt-4">
+                 <Info className="w-5 h-5 shrink-0" />
+                 Atenção: Lembrar de manter em dieta zero até estabilização complementar.
+               </div>
+             </div>
+           </div>
+        </div>
+
+        {/* 5. ANTIBIOTICOTERAPIA */}
+        <div className="space-y-4">
+           <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+             <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">5</span>
+             ANTIBIOTICOTERAPIA EMPÍRICA POR FOCO
+           </h3>
+           <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+             <table className="w-full text-left text-sm">
+               <thead className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-widest font-black text-slate-500">
+                 <tr>
+                   <th className="p-6 w-1/4">Foco Suspeito</th>
+                   <th className="p-6 border-l border-slate-200">Antibioticoterapia Sugerida (Amplo Espectro)</th>
+                 </tr>
+               </thead>
+               <tbody className="divide-y divide-slate-100">
+                 <tr className="hover:bg-slate-50">
+                   <td className="p-6 font-bold text-slate-800 align-top">Pulmonar</td>
+                   <td className="p-6 border-l border-slate-100 font-medium text-slate-600">
+                     Piperacilina-Tazobactam 4,5g EV 6/6H (Administrar em 1 hora)<br/>
+                     <span className="font-bold my-1 block text-slate-400">+</span>
+                     Azitromicina 500mg 1 CP 1x ao dia por 5 dias
+                   </td>
+                 </tr>
+                 <tr className="hover:bg-slate-50">
+                   <td className="p-6 font-bold text-slate-800 align-top">Abdominal</td>
+                   <td className="p-6 border-l border-slate-100 font-medium text-slate-600">Piperacilina-Tazobactam 4,5g EV 6/6H (Administrar em 1 hora)</td>
+                 </tr>
+                 <tr className="hover:bg-slate-50">
+                   <td className="p-6 font-bold text-slate-800 align-top">Urinário</td>
+                   <td className="p-6 border-l border-slate-100 font-medium text-slate-600">Piperacilina-Tazobactam 4,5g EV 6/6H (Administrar em 1 hora)</td>
+                 </tr>
+                 <tr className="hover:bg-slate-50">
+                   <td className="p-6 font-bold text-slate-800 align-top">Meningite</td>
+                   <td className="p-6 border-l border-slate-100 font-medium text-slate-600">Ceftriaxona 2g EV 12/12H (Se Listeria: + Ampicilina 2g EV 4/4H)</td>
+                 </tr>
+                 <tr className="hover:bg-slate-50">
+                   <td className="p-6 font-bold text-slate-800 align-top">Cutâneo</td>
+                   <td className="p-6 border-l border-slate-100 font-medium text-slate-600">
+                     Ceftriaxona 2g EV 24/24H<br/>
+                     Associar Oxacilina 2g EV 4/4H <strong>OU</strong> Clindamicina 600mg EV 6/6H
+                   </td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+        </div>
+
+        {/* 6 & 7. VASOPRESSORES & CUIDADOS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+           {/* Section 6 */}
+           <div className="space-y-4">
+             <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+               <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">6</span>
+               SUPORTE HEMODINÂMICO & Rx
+             </h3>
+             <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm">
+                  <p className="font-black text-slate-800 mb-1">Noradrenalina — 1ª Escolha no Choque</p>
+                  <p className="text-slate-600 text-xs mb-3">Indicação: PAM &lt; 65 mmHg persistente após expansão.</p>
+                  <div className="bg-white p-3 rounded-lg border border-slate-200 font-mono text-[10px] text-slate-500">
+                    Nora (1 mg/mL) 4 amp + 234 mL SG 5%. Iniciar 5 mL/h.
+                  </div>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm">
+                  <p className="font-black text-slate-800 mb-1">Vasopressina — 2ª Escolha</p>
+                  <p className="text-slate-600 text-xs mb-3">Indicação: Desmame ou falha terapêutica.</p>
+                  <div className="bg-white p-3 rounded-lg border border-slate-200 font-mono text-[10px] text-slate-500">
+                    (1 amp = 20 U) 2 amp + 98 mL SF 0,9%. EV em BIC. Iniciar 1 mL/h.
+                  </div>
+                </div>
+
+                <div className="p-4 bg-amber-50 rounded-xl border border-amber-100 text-sm text-amber-900">
+                  <p className="font-black text-amber-800 mb-1">Corticosteroides (Choque Séptico)</p>
+                  <p className="text-amber-700 text-xs">Hidrocortisona 200–300 mg/dia IV (50 mg IV 6/6h) se refratário.</p>
+                </div>
+             </div>
+           </div>
+
+           {/* Section 7 */}
+           <div className="space-y-4">
+             <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+               <span className="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">7</span>
+               CUIDADOS GERAIS E PROFILAXIAS
+             </h3>
+             <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-4">
+                {[
+                  { title: 'Monitorização contínua', desc: 'PA, FC, SpO2, Diurese, Temperatura' },
+                  { title: 'VM protetora', desc: '(se intubado): VC 6-8 mL/kg peso ideal. Pressão platô < 30 cmH2O' },
+                  { title: 'Profilaxia TEV', desc: 'Enoxaparina 40mg SC 1x/dia ou HNF 5.000U SC 3x/dia' },
+                  { title: 'Profilaxia LAMG', desc: 'Pantoprazol ou Omeprazol 40mg EV 24/24h' },
+                  { title: 'Controle Glicêmico', desc: 'Alvo moderado 140–180 mg/dL' },
+                  { title: 'Sonda vesical', desc: 'Balanço hídrico rigoroso de horário' },
+                  { title: 'Acesso Venoso Central', desc: 'Providenciar rapidamente se manter doses crescentes de vasopressor' },
+                ].map((item, idx) => (
+                   <div key={idx} className="flex gap-4 items-center p-3 rounded-xl hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0">
+                     <div className="w-5 h-5 bg-emerald-100 text-emerald-600 rounded flex items-center justify-center shrink-0">
+                        <Check className="w-3.5 h-3.5" />
+                     </div>
+                     <div>
+                        <p className="text-xs font-bold text-slate-800">{item.title}</p>
+                        <p className="text-[10px] text-slate-500 leading-tight">{item.desc}</p>
+                     </div>
+                   </div>
+                ))}
+             </div>
+           </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
